@@ -1,0 +1,156 @@
+Nous avons utilisé une nouvelle structure, appelée Phrase, de type liste chaînée. 
+Chaque élément contient une chaîne, le numéro de la phrase et un pointeur vers l'élément suivant.
+Nous ajoutons donc un nouveau paramètre à Index, qui est un pointeur vers la première phrase.
+
+fonctions supplementaires
+t_Position* creer_position(int nbligne, int ordre, int nbphrase);
+    Cette fonction crée une nouvelle position basée sur les paramètres donnés. O(1)
+
+int behide_position(t_Position *pos, int ligne, int ordre, int num_phrase);
+int before_position(t_Position *pos, int ligne, int ordre, int num_phrase);
+    Ces deux fonctions comparent la position actuelle et les nouveaux paramètres. 
+    Nous savons si la position à ajouter est postérieure ou antérieure à la position actuelle. O(1)
+
+t_Noeud* creer_noeud(char* mot, int num_occurences, t_ListePosition* listeP, t_Noeud* gauche, t_Noeud* droit);
+    Crée un nouveau nœud, où n est le nombre d'éléments dans la liste de positions que nous avons, O(n)
+
+char* strlower(char *s1);
+    convertit une chaîne de longueur n 
+    en une nouvelle chaîne avec tous les caractères minuscules, O(n)
+
+void printListepositions(t_ListePosition *listeP);
+    Imprimer une liste de positions avec n éléments, O(n)
+void printNoeud(t_Noeud *noeud, char *title);
+    Imprimez une liste de noeuds, si nous avons n nœuds et que chaque noeud a m positions, O(n*m)
+void printPhrase(t_Phrase *listePhrase, int k);
+    Imprimer une phrase, O(1)
+
+
+char *make_word(char *word, char c, int size);
+   Ajouter un caractère à la fin d'une chaîne, O(1)
+int check_char(char c);
+    vérifie qu'un caractère est lu comme 
+    un alphanumérique, un espace, une marque de fin ou un retour chariot O(1)
+t_Phrase *creerPhrase(int serial, char *sentence);
+    Créez une nouvelle phrase, O(1)
+char *prolong_sentence(char *sentence, char *word);
+    ajouter un mot à la fin d'une phrase, O(1)
+
+int level_Noeud(t_Noeud *Noeud);
+    vérifier la hauteur d'un arbre binaire,
+int check_Noeud(t_Noeud *Noeud);
+    Vérifiez si l'arbre binaire de Noued est équilibré
+
+t_Noeud *Maximale(t_Noeud *Noeud);
+t_Noeud *Minimale(t_Noeud *Noeud);
+    recherche le plus grand / le plus petit élément de l'arbre binaire de Noeud
+t_Noeud *Parent_Noeud(t_Index *index, t_Noeud *Noeud);
+    à la recherche de noued père de noued ne t
+t_Noeud *Successeur_Noeud(t_Index *index, t_Noeud *Noeud);
+    recherche du noued adjacent (le plus petit noued a une valeur supérieure au noued actuel)
+t_Noeud *Classer_Noeud(t_Index *index);
+    transforme l'arbre binaire actuel 
+    en un arbre binaire incliné vers la droite (tous les nœuds n'ont pas d'élément gauche)
+
+t_Noeud *Left_Rotation(t_Noeud *Noeud);
+    Phép quay trái đơn giản, chỉ quay một cây nhị phân với 3 phần tử 
+t_Noeud *equilibrer_Noeud(t_Noeud *Noeud, int start, int end);
+    Équilibre les étamines
+
+
+fonctions clean
+void cleanPosition(t_Position *p);
+void cleanListePosition(t_ListePosition *p);
+void cleanNoeud(t_Noeud *p);
+void cleanPhrase(t_Phrase *p);
+void cleanIndex(t_Index *p);
+
+
+fonctions de base
+t_ListePosition* creer_liste_positions();
+    créer une liste de positions, initialement sans aucune position, nb_elements = 0, O(1)
+
+int ajouter_position(t_ListePosition* listeP, int ligne, int ordre, int num_phrase);
+    La fonction ajoute une nouvelle position à la liste des positions
+
+t_Index*creer_index();
+    créer un nouvel index, initialement ne rien indexer, O (1)
+
+t_Noeud* rechercher_mot(t_Index* index, char* mot);
+    Recherche un mot dans un index, 
+    la fonction retournera la position de noeud si ce mot existe dans l'index,
+
+int ajouter_noeud(t_Index* index, t_Noeud* noeud);
+    ajoute un nouveau noeud à un index, en effet ajoute à l'arbre binaire noeud de l'index
+
+int indexer_fichier(t_Index*index, char *filename);
+    Lit un fichier et crée un index contenant les informations à lire à partir du fichier.
+    Nous utilisons la lecture caractère par lettre. 
+    utilisez la fonction check_char pour décider de la prochaine chose que nous ferons, 
+    cela arrêtera la boucle while lors de la lecture jusqu'à la fin du fichier.
+    si lire un caractère
+        Si nous avons déjà un mot (un mot de taille> 1 à cause de size = 1 c'est un mot vide '\ 0'), 
+            ajoutez ce caractère au mot actuel.
+        sinon, 
+            créez un nouveau mot et ajoutez la lettre au nouveau mot
+    sinon
+        si un espace est lu
+            Si nous n'avons pas de mots actuellement concaténés, 
+                passez et continuez à lire le caractère suivant
+            Si nous lisons un mot, 
+                augmentez le nombre de mots lus de 1, 
+                vérifiez si ce mot est dans l'index, 
+                    si c'est le cas, 
+                        ajoutez une nouvelle position au nœud correspondant. 
+                    Sinon, ajoutez un nouveau nœud à l'index, 
+                    en augmentant le nombre de mots différents de 1
+            ajouter des mots à phare
+            libération de la lecture
+            augmente la valeur de position de 1
+        sinon si nous lisons un point
+            Si nous n'avons pas de mots actuellement concaténés, 
+                passez et continuez à lire le caractère suivant
+            sinon, 
+                ajoutez le mot à la phrase, 
+                terminez la phrase, 
+                augmentez la valeur de position et le nombre de phrases de 1
+        sinon si on lit un retour chariot:
+                Si nous ne lisons pas une phrase actuellement, 
+                    augmentez le nombre de lignes de 1, 
+                    renvoie la valeur de position à 1
+                Sinon, nous écrivons un mot ou non, 
+                    si c'est le cas, 
+                        vérifiez si le mot est dans l'index ou non, 
+                        puis ajoutez une nouvelle position si ce mot existe déjà, 
+                        ou créez un nouveau nœud s'il n'existe pas déjà.
+                        ajoute des mots aux phrases, 
+                        augmente le nombre de lignes de 1, 
+                        renvoie la valeur de position à 1,
+
+void afficher_index(t_Index *index);
+    afficher toutes les informations d'index sont classées par ordre alphabétique
+
+void afficher_occurences_mot(t_Index *index, char *mot);
+    Recherche un mot et afficher des informations sur ce mot avec 
+    la phrase où le mot apparaît s'il se trouve dans l'index
+
+t_Index* equilibrer_index(t_Index *index);
+    Pour équilibrer un arbre binaire, dans notre travail, 
+    la façon dont nous l'utilisons est la suivante:
+    vérifiez d'abord que le nœud est équilibré, sinon, commencer equibliration
+    transformer le nœud d'origine en un nœud entièrement dévié à droite en utilisant la fonction classer_noeud
+    Poursuivant l'équilibre en utilisant la fonction equilibre_noeud 
+        avec le nœud déjà classeur, nous utiliserons la récursivité. 
+            Pour chaque appel de fonction d'équilibre, 
+            nous transmettons les valeurs de start et de end. 
+            Utilisez la valeur médiane pour renvoyer le résultat, 
+            puis nous équilibrons à gauche du start à mid-1 et à droite du mid à end.
+        Si start = end, ou start = end -1, ou start> end, nous traiterons simplement ces cas. 
+        Ou si start = end -2, c'est un arbre binaire à 3 nœuds et nous tournerons à gauche.
+        Dans ces cas, nous devons prendre soin de libérer les valeurs filsDroit et filsGauche.
+
+void printTree(t_Noeud *Noeud, int space);
+    Imprimez tous les nœuds de l'arbre binaire et leurs hauteurs respectives à chaque nœud.
+
+void menu();       
+    Menu principal du programme
